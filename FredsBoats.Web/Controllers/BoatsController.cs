@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FredsBoats.Web.Data;
@@ -31,6 +32,7 @@ namespace FredsBoats.Web.Controllers
             var boat = await _context.Boats
                 .Include(b => b.Category)
                 .Include(b => b.BoatColour)
+                .Include(b => b.Comments)
                 // We include this in anticipation of the exam task (Comments)
                 // but for now it will just prevent errors if the property exists
                 .FirstOrDefaultAsync(m => m.BoatId == id);
@@ -39,5 +41,22 @@ namespace FredsBoats.Web.Controllers
 
             return View(boat);
         }
+        [HttpPost]
+    public async Task<IActionResult> CreateComment(int boatId, string content, string author)
+    {
+        var comment = new Comment
+        {
+            BoatId = boatId,
+            Author = author,
+            Content = content,
+            CreatedAt = DateTime.Now
+            
+        };
+
+        _context.Add(comment);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Details", new { id = boatId });
+    }
     }
 }

@@ -32,8 +32,8 @@ namespace FredsBoats.Web.Models
 
         [ForeignKey("ColourId")]
         public BoatColour? BoatColour { get; set; }
-
-        // Navigation for Reservations
-        public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+        
+        // Navigation Property
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
